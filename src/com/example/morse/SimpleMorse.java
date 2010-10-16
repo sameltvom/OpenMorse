@@ -6,6 +6,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 public class SimpleMorse extends Activity {
@@ -35,6 +36,8 @@ public class SimpleMorse extends Activity {
 	/* The letters that are finished */
 	private StringBuilder message = new StringBuilder();
 	
+	private EditText editField;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class SimpleMorse extends Activity {
         image.setOnTouchListener(mOnTouchImageListener);
         image.setOnClickListener(mOnImageClickListener);
         
+        editField = (EditText)findViewById(R.id.edit);
     }
     
     
@@ -77,12 +81,18 @@ public class SimpleMorse extends Activity {
 					
 					char result = Morse.getLetter(letter.toString());
 					message.append(result);
+					
+					/* Append the letter to the EditText field */
+					editField.append(""+result);
+				
 					/* Reset the letter */
 					letter.delete(0, letter.length());
 					
 					/* End of word? */
 					if (timeBetweenTones > 7*Morse.UNIT_TIME) {
 						morseCode.append(" | ");
+						/* Append a space to the EditText field */
+						editField.append(" ");
 					}
 				}
 			} else {
