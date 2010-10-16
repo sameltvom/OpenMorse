@@ -26,7 +26,13 @@ public class SimpleMorse extends Activity {
 	/* Have we pressed but not released? */
 	private boolean isPressed = false;
 	
-	/* The message we are creating */
+	/* All dashes, dots, spaces and word endings: {'.','-',' ','|'} */
+	private StringBuilder morseCode = new StringBuilder();
+	
+	/* The current letter we are building */
+	private StringBuilder letter = new StringBuilder();
+	
+	/* The letters that are finished */
 	private StringBuilder message = new StringBuilder();
 	
     /** Called when the activity is first created. */
@@ -67,10 +73,16 @@ public class SimpleMorse extends Activity {
 				
 				/* End of letter? */
 				if (timeBetweenTones > 3*Morse.UNIT_TIME) {
-					message.append(' ');
+					morseCode.append(' ');
+					
+					char result = Morse.getLetter(letter.toString());
+					message.append(result);
+					/* Reset the letter */
+					letter.delete(0, letter.length());
+					
 					/* End of word? */
 					if (timeBetweenTones > 7*Morse.UNIT_TIME) {
-						message.append(" | ");
+						morseCode.append(" | ");
 					}
 				}
 			} else {
@@ -93,9 +105,13 @@ public class SimpleMorse extends Activity {
 				break;
 			}
 			
-			message.append(tone);
+			morseCode.append(tone);
+			letter.append(tone);
+			
 			Log.d("SimpleMorse", "time: "+diff+" "+tone);
+			Log.d("SimpleMorse", "morse code: "+morseCode.toString());
 			Log.d("SimpleMorse", "message: "+message.toString());
+			
 			previousEnd = end;
 		}	 
 	};
