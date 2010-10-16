@@ -6,15 +6,24 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 
 public class SimpleMorse extends Activity {
 	private final int DOT = 0;
 	private final int DASH = 1;
 	
-	/* If the tone is shorter than DOT_TIME, it is a dot, otherwise a dash */
-	private int DOT_TIME = 250;
+	/* From wikipedia article Morse code
+	 * 
+	 * International Morse code is composed of five elements:
+     * - short mark, dot or 'dit' (·) — one unit long
+     * - longer mark, dash or 'dah' (–) — three units long
+     * - inter-element gap between the dots and dashes within a character — one unit long
+     * - short gap (between letters) — three units long
+     * - medium gap (between words) — seven units long[11]
+	 *
+	 */
+	
+	private int UNIT_TIME = 250;
 	
 	
 	/* When the morse tone started */
@@ -22,6 +31,12 @@ public class SimpleMorse extends Activity {
 	
 	/* When the morse tone stopped */
 	private long end;
+	
+	/* When the previous morse tone stopped */
+	private long previousEnd;
+	
+	/* Is this the first tone? */
+	private boolean firstTone = true;
 	
 	/* Have we pressed but not released? */
 	private boolean isPressed = false;
@@ -55,10 +70,18 @@ public class SimpleMorse extends Activity {
 		
 		@Override
 		public void onClick(View v) {
-			/* Save the time when the previous tone stopped */
-			long previousEnd = end;
-			
 			end = SystemClock.uptimeMillis();
+			
+			if (!firstTone) {
+				/* Was the previous tone the end of a tone, letter or a word? */
+				long timeBetweenTones = start-previousEnd;
+				
+				Log.d("SimpleMorse", "Time between tones: "+timeBetweenTones);
+			} else {
+				firstTone = false;
+			}
+			
+			
 			long diff = end-start;
 			isPressed = false;
 			
@@ -75,17 +98,18 @@ public class SimpleMorse extends Activity {
 			}
 			
 			Log.d("SimpleMorse", "time: "+diff+" "+tone);
-		
-			
+			previousEnd = end;
 		}
 
 		/* Is the tone a dot or a dash? */
 		private int dotOrDash(long toneLength) {
-			if (toneLength < DOT_TIME) {
+			/* If the tone is shorter than UNIT_TIME, it is a dot, otherwise a dash,
+			 * actually a dash should be 3 units but whatever... */
+			if (toneLength < UNIT_TIME) {
 				return DOT;
 			} else {
 				return DASH;
 			}
-		}
+		} 
 	};
 }
