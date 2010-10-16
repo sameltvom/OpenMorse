@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, SimpleMorse!</string>
-    <string name="app_name">Simple morse</string>
+    <string name="app_name">Open morse</string>
 </resources>
