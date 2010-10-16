@@ -2,5 +2,4 @@
 <resources>
     <string name="hello">Hello World, SimpleMorse!</string>
     <string name="app_name">Simple morse</string>
-    <string name="button_text">Click</string>
 </resources>

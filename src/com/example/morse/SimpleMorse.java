@@ -10,11 +10,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 public class SimpleMorse extends Activity {
+	private final int DOT = 0;
+	private final int DASH = 1;
+	
+	/* If the tone is shorter than DOT_TIME, it is a dot, otherwise a dash */
+	private int DOT_TIME = 250;
+	
+	
 	/* When the morse tone started */
 	private long start;
 	
+	/* When the morse tone stopped */
+	private long end;
+	
 	/* Have we pressed but not released? */
 	private boolean isPressed = false;
+	
 	
     /** Called when the activity is first created. */
     @Override
@@ -26,8 +37,6 @@ public class SimpleMorse extends Activity {
         image.setOnTouchListener(mOnTouchImageListener);
         image.setOnClickListener(mOnImageClickListener);
         
-        //Button button = (Button)findViewById(R.id.button);
-        //button.setOnClickListener(mOnButtonClickListener);
     }
     
     
@@ -46,11 +55,37 @@ public class SimpleMorse extends Activity {
 		
 		@Override
 		public void onClick(View v) {
-			long end = SystemClock.uptimeMillis();
-			long diff = end-start;
-			Log.d("SimpleMorse", "time: "+diff);
+			/* Save the time when the previous tone stopped */
+			long previousEnd = end;
 			
+			end = SystemClock.uptimeMillis();
+			long diff = end-start;
 			isPressed = false;
+			
+			int toneType = dotOrDash(diff);
+			char tone = ' ';
+			switch (toneType) {
+			case DOT:
+				tone = '.';
+				break;
+			case DASH:
+				tone = '-';
+			default:
+				break;
+			}
+			
+			Log.d("SimpleMorse", "time: "+diff+" "+tone);
+		
+			
+		}
+
+		/* Is the tone a dot or a dash? */
+		private int dotOrDash(long toneLength) {
+			if (toneLength < DOT_TIME) {
+				return DOT;
+			} else {
+				return DASH;
+			}
 		}
 	};
 }
