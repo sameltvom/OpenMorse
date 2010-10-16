@@ -41,6 +41,8 @@ public class SimpleMorse extends Activity {
 	/* Have we pressed but not released? */
 	private boolean isPressed = false;
 	
+	/* The message we are creating */
+	private StringBuilder message = new StringBuilder();
 	
     /** Called when the activity is first created. */
     @Override
@@ -77,6 +79,15 @@ public class SimpleMorse extends Activity {
 				long timeBetweenTones = start-previousEnd;
 				
 				Log.d("SimpleMorse", "Time between tones: "+timeBetweenTones);
+				
+				/* End of letter? */
+				if (timeBetweenTones > 3*UNIT_TIME) {
+					message.append(' ');
+					/* End of word? */
+					if (timeBetweenTones > 7*UNIT_TIME) {
+						message.append(" | ");
+					}
+				}
 			} else {
 				firstTone = false;
 			}
@@ -97,7 +108,9 @@ public class SimpleMorse extends Activity {
 				break;
 			}
 			
+			message.append(tone);
 			Log.d("SimpleMorse", "time: "+diff+" "+tone);
+			Log.d("SimpleMorse", "message: "+message.toString());
 			previousEnd = end;
 		}
 
