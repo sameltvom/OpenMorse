@@ -9,21 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 public class SimpleMorse extends Activity {
-	private final int DOT = 0;
-	private final int DASH = 1;
-	
-	/* From wikipedia article Morse code
-	 * 
-	 * International Morse code is composed of five elements:
-     * - short mark, dot or 'dit' (·) — one unit long
-     * - longer mark, dash or 'dah' (–) — three units long
-     * - inter-element gap between the dots and dashes within a character — one unit long
-     * - short gap (between letters) — three units long
-     * - medium gap (between words) — seven units long[11]
-	 *
-	 */
-	
-	private int UNIT_TIME = 250;
 	
 	
 	/* When the morse tone started */
@@ -81,10 +66,10 @@ public class SimpleMorse extends Activity {
 				Log.d("SimpleMorse", "Time between tones: "+timeBetweenTones);
 				
 				/* End of letter? */
-				if (timeBetweenTones > 3*UNIT_TIME) {
+				if (timeBetweenTones > 3*Morse.UNIT_TIME) {
 					message.append(' ');
 					/* End of word? */
-					if (timeBetweenTones > 7*UNIT_TIME) {
+					if (timeBetweenTones > 7*Morse.UNIT_TIME) {
 						message.append(" | ");
 					}
 				}
@@ -96,13 +81,13 @@ public class SimpleMorse extends Activity {
 			long diff = end-start;
 			isPressed = false;
 			
-			int toneType = dotOrDash(diff);
+			int toneType = Morse.dotOrDash(diff);
 			char tone = ' ';
 			switch (toneType) {
-			case DOT:
+			case Morse.DOT:
 				tone = '.';
 				break;
-			case DASH:
+			case Morse.DASH:
 				tone = '-';
 			default:
 				break;
@@ -112,17 +97,9 @@ public class SimpleMorse extends Activity {
 			Log.d("SimpleMorse", "time: "+diff+" "+tone);
 			Log.d("SimpleMorse", "message: "+message.toString());
 			previousEnd = end;
-		}
-
-		/* Is the tone a dot or a dash? */
-		private int dotOrDash(long toneLength) {
-			/* If the tone is shorter than UNIT_TIME, it is a dot, otherwise a dash,
-			 * actually a dash should be 3 units but whatever... */
-			if (toneLength < UNIT_TIME) {
-				return DOT;
-			} else {
-				return DASH;
-			}
-		} 
+		}	 
 	};
+	
+	
+	
 }
