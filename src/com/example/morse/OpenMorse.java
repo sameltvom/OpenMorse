@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class SimpleMorse extends Activity {
+public class OpenMorse extends Activity {
 	
 	/* When the morse tone started */
 	private long start;
