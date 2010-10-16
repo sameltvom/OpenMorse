@@ -1,9 +1,6 @@
 package com.example.morse;
 
 public class Morse {
-	public static final int DOT = 0;
-	public static final int DASH = 1;
-	
 	/* From wikipedia article Morse code
 	 * 
 	 * International Morse code is composed of five elements:
@@ -22,17 +19,6 @@ public class Morse {
 	
 	public static int MEDIUM_GAP_TIME = UNIT_TIME*7;
 	
-	/* Is the tone a dot or a dash? */
-	public static int dotOrDash(long toneLength) {
-		/* If the tone is shorter than UNIT_TIME, it is a dot, otherwise a dash,
-		 * actually a dash should be 3 units but whatever... */
-		if (toneLength < UNIT_TIME) {
-			return DOT;
-		} else {
-			return DASH;
-		}
-	}
-
 	/* Get a letter from the morse code in s.
 	 * Morse code alphabet taken from
 	 * http://en.wikipedia.org/wiki/Morse_code#Letters.2C_numbers.2C_punctuation */
