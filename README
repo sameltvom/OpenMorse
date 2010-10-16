@@ -1,0 +1,8 @@
+About
+
+OpenMorse is an android application that converts morse code on-the-fly to text displayed to the user.
+
+
+Installation
+
+Do a normal 'import project' in eclipse. Make sure that you have the android SDK installed and eclipse configured: http://developer.android.com/sdk/index.html
