@@ -18,6 +18,10 @@ public class Morse {
 	/* Unit time in ms */
 	public static int UNIT_TIME = 200;
 	
+	public static int SHORT_GAP_TIME = UNIT_TIME*3;
+	
+	public static int MEDIUM_GAP_TIME = UNIT_TIME*7;
+	
 	/* Is the tone a dot or a dash? */
 	public static int dotOrDash(long toneLength) {
 		/* If the tone is shorter than UNIT_TIME, it is a dot, otherwise a dash,

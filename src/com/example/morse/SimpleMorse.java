@@ -2,6 +2,8 @@ package com.example.morse;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -43,6 +45,8 @@ public class SimpleMorse extends Activity {
 	/* This is the morse code for the ongoing letter being generated */
 	private TextView morseCodeView;
 	
+	private Handler handler = new Handler();
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,11 @@ public class SimpleMorse extends Activity {
 			if (!isPressed) {
 				start = SystemClock.uptimeMillis();
 				isPressed = true;
+				
+				/* No need any more to check if we should finish a letter,
+				 * because we are now doing a new tone */
+				handler.removeCallbacks(finishLetterOrWordWorker);
+				handler.removeCallbacks(finishWordTask);
 			}
 			return false;
 		}
@@ -75,12 +84,17 @@ public class SimpleMorse extends Activity {
 		public void onClick(View v) {
 			end = SystemClock.uptimeMillis();
 			
+			/* Set timer to check later if we should finish the letter and the word */
+			handler.postDelayed(finishLetterOrWordWorker, Morse.SHORT_GAP_TIME);
+			handler.postDelayed(finishWordTask, Morse.MEDIUM_GAP_TIME);
+			
 			if (!firstTone) {
 				/* Was the previous tone the end of a tone, letter or a word? */
 				long timeBetweenTones = start-previousEnd;
 				
 				Log.d("SimpleMorse", "Time between tones: "+timeBetweenTones);
 				
+				if (false) {
 				/* End of letter? */
 				if (timeBetweenTones > 3*Morse.UNIT_TIME) {
 					morseCode.append(' ');
@@ -103,6 +117,7 @@ public class SimpleMorse extends Activity {
 						/* Append a space to the EditText field */
 						editField.append(" ");
 					}
+				}
 				}
 			} else {
 				firstTone = false;
@@ -135,7 +150,34 @@ public class SimpleMorse extends Activity {
 			previousEnd = end;
 		}	 
 	};
+
+	Runnable finishLetterOrWordWorker = new Runnable() {
+		public void run() {
+			Log.d("SimpleMorse", "finish letter?");
+			/* End of letter? */
+			morseCode.append(' ');
+
+			char result = Morse.getLetter(letter.toString());
+			message.append(result);
+
+			/* Append the letter to the EditText field */
+			editField.append(""+result);
+
+			/* Reset the letter */
+			letter.delete(0, letter.length());
+
+			/* Reset the morse code presented to the user */
+			morseCodeView.setText("");
+		}
+	};
 	
-	
-	
+	Runnable finishWordTask = new Runnable() {
+		public void run() {
+			Log.d("SimpleMorse", "finish word?");
+			morseCode.append(" | ");
+			/* Append a space to the EditText field */
+			editField.append(" ");
+
+		}
+	};
 }
