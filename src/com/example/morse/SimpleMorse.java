@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class SimpleMorse extends Activity {
 	
@@ -36,7 +37,11 @@ public class SimpleMorse extends Activity {
 	/* The letters that are finished */
 	private StringBuilder message = new StringBuilder();
 	
+	/* This is where our decoded morse code is presented to the user */
 	private EditText editField;
+	
+	/* This is the morse code for the ongoing letter being generated */
+	private TextView morseCodeView;
 	
     /** Called when the activity is first created. */
     @Override
@@ -49,6 +54,7 @@ public class SimpleMorse extends Activity {
         image.setOnClickListener(mOnImageClickListener);
         
         editField = (EditText)findViewById(R.id.edit);
+        morseCodeView = (TextView)findViewById(R.id.morse_code);
     }
     
     
@@ -88,6 +94,9 @@ public class SimpleMorse extends Activity {
 					/* Reset the letter */
 					letter.delete(0, letter.length());
 					
+					/* Reset the morse code presented to the user */
+					morseCodeView.setText("");
+					
 					/* End of word? */
 					if (timeBetweenTones > 7*Morse.UNIT_TIME) {
 						morseCode.append(" | ");
@@ -117,6 +126,7 @@ public class SimpleMorse extends Activity {
 			
 			morseCode.append(tone);
 			letter.append(tone);
+			morseCodeView.append(""+tone);
 			
 			Log.d("SimpleMorse", "time: "+diff+" "+tone);
 			Log.d("SimpleMorse", "morse code: "+morseCode.toString());
