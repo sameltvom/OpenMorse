@@ -19,16 +19,23 @@
 package com.example.morse;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class OpenMorse extends Activity {
+	private static final int SETTINGS_ID = Menu.FIRST;
+    
 	
 	/* When the morse tone started */
 	private long start;
@@ -63,6 +70,8 @@ public class OpenMorse extends Activity {
         editField = (EditText)findViewById(R.id.edit);
         morseCodeView = (TextView)findViewById(R.id.morse_code);
     }
+    
+    
     
     
     private View.OnTouchListener mOnTouchImageListener = new View.OnTouchListener() {
@@ -130,4 +139,23 @@ public class OpenMorse extends Activity {
 			editField.append(" ");
 		}
 	};
+
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        menu.add(0, SETTINGS_ID, 0, R.string.menu_settings);
+        return true;
+    }
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case SETTINGS_ID:
+			Intent i = new Intent(this, Settings.class);
+	        startActivityForResult(i, 0);
+	        return true;
+		}
+		
+		return super.onMenuItemSelected(featureId, item);
+	}
 }
