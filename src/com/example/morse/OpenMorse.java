@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class OpenMorse extends Activity {
+	private static final int ACTIVITY_CREATE = 0;
 	private static final int SETTINGS_ID = Menu.FIRST;
     
 	
@@ -69,6 +71,9 @@ public class OpenMorse extends Activity {
         
         editField = (EditText)findViewById(R.id.edit);
         morseCodeView = (TextView)findViewById(R.id.morse_code);
+        
+        /* Set default unit time to 200 */
+        Morse.setUnitTime(200);
     }
     
     
@@ -152,10 +157,28 @@ public class OpenMorse extends Activity {
 		switch (item.getItemId()) {
 		case SETTINGS_ID:
 			Intent i = new Intent(this, Settings.class);
-	        startActivityForResult(i, 0);
+			/* Give the speed as an argument */
+			i.putExtra("speed", Morse.UNIT_TIME);
+	        startActivityForResult(i, ACTIVITY_CREATE);
 	        return true;
 		}
 		
 		return super.onMenuItemSelected(featureId, item);
 	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		Bundle extras = data.getExtras();
+        switch(requestCode) {
+            case ACTIVITY_CREATE:
+            	int speed = extras.getInt("speed");
+            	Log.d("OpenMorse", speed+"");
+            	Morse.setUnitTime(speed);
+                break;
+        }
+
+	}
+	
+	
 }

@@ -30,12 +30,21 @@ public class Morse {
 	 *
 	 */
 	
+	public static final int MIN_UNIT_TIME = 50;
+	public static final int MAX_UNIT_TIME = 300;
+
 	/* Unit time in ms */
-	public static int UNIT_TIME = 200;
+	public static int UNIT_TIME;
 	
-	public static int SHORT_GAP_TIME = UNIT_TIME*3;
+	public static int SHORT_GAP_TIME;
+
+	public static int MEDIUM_GAP_TIME;
 	
-	public static int MEDIUM_GAP_TIME = UNIT_TIME*7;
+	public static void setUnitTime(int speed) {
+		UNIT_TIME = speed;
+		SHORT_GAP_TIME = UNIT_TIME*3;
+		MEDIUM_GAP_TIME = UNIT_TIME*7;
+	}
 	
 	/* Get a letter from the morse code in s.
 	 * Morse code alphabet taken from
