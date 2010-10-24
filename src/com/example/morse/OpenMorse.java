@@ -169,14 +169,17 @@ public class OpenMorse extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		Bundle extras = data.getExtras();
-        switch(requestCode) {
-            case ACTIVITY_CREATE:
-            	int speed = extras.getInt("speed");
-            	Log.d("OpenMorse", speed+"");
-            	Morse.setUnitTime(speed);
-                break;
-        }
+		/* If the back key wasn't pressed */
+		if (data != null) {
+			Bundle extras = data.getExtras();
+			switch(requestCode) {
+			case ACTIVITY_CREATE:
+				int speed = extras.getInt("speed");
+				Log.d("OpenMorse", speed+"");
+				Morse.setUnitTime(speed);
+				break;
+			}
+		}
 
 	}
 	
